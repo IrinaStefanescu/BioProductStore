@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31727.386
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioProductStore", "BioProductStore\BioProductStore.csproj", "{284653D5-B309-4D37-9A93-EC8D144944A2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{284653D5-B309-4D37-9A93-EC8D144944A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{284653D5-B309-4D37-9A93-EC8D144944A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{284653D5-B309-4D37-9A93-EC8D144944A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{284653D5-B309-4D37-9A93-EC8D144944A2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5961575E-C541-4B33-AEEC-3EDA79E7EA8C}
+	EndGlobalSection
+EndGlobal
