@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BioProductStore.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ namespace BioProductStore.Controller
 {
     public class DataBaseController : ControllerBase
     {
-        private readonly BioProductsStoreContext _context;
+        private readonly BioProductStoreContext _context;
 
-        public DataBaseController(BioProductsStoreContext context)
+        public DataBaseController(BioProductStoreContext context)
         {
             _context = context;
         }

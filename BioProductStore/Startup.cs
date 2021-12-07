@@ -1,3 +1,6 @@
+using BioProductStore.Data;
+using BioProductStore.Repositories.UserRepository;
+using BioProductStore.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static BioProductStore.Data.BioProductStoreContext;
 
 namespace BioProductStore
 {
@@ -32,7 +34,14 @@ namespace BioProductStore
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BioProductsStore", Version = "v1" });
             });
 
-            services.AddDbContext<BioProductsStoreContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<BioProductStoreContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            //Repositories:
+            //it's created everytime a request it's been made
+            services.AddTransient<IUserRepository, UserRepository>();
+
+            //Services:
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
