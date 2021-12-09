@@ -60,6 +60,7 @@ namespace BioProductStore
                 app.UseHsts();
             }
 
+            //others
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
