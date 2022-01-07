@@ -1,4 +1,5 @@
-﻿using BioProductStore.DTOs;
+﻿using BioProductStore.Data;
+using BioProductStore.DTOs;
 using BioProductStore.Models;
 using BioProductStore.Repositories.UserRepository;
 using System;
@@ -11,6 +12,7 @@ namespace BioProductStore.Services
     public class UserService : IUserService
     {
         public IUserRepository _userRepository;
+        public BioProductStoreContext _context;
 
         public UserService(IUserRepository userRepository)
         {

@@ -16,7 +16,10 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Repositories\CategoryRepository\" />
+    <Folder Include="Services\CategoryService\" />
+    <Folder Include="Services\ExpeditionAddressService\" />
+    <Folder Include="Services\OrderService\" />
+    <Folder Include="Services\ProductService\" />
   </ItemGroup>
 
 </Project>
