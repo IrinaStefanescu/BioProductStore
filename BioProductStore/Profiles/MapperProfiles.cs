@@ -39,6 +39,7 @@ namespace BioProductStore.Profiles
 
             //OrderProductRelation
             CreateMap<OrderProductRegisterDTO, OrderProduct>();
+            //CreateMap<OrderProductUpdateDTO, OrderProduct>();
         }
     }
 }

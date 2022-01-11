@@ -20,7 +20,6 @@ namespace BioProductStore.Utilities.Attributes
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            //aici ne facem un obiect la care ii punem un mesaj si un status code
             var unauthorizedStatusCodeObject =
                 new JsonResult(new
                 {

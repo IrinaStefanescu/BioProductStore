@@ -22,7 +22,7 @@ namespace BioProductStore.Utilities.JWTUtils
 
         public string GenerateJWTToken(User user)
         {
-            var tokenHandler = new JwtSecurityTokenHandler(); //cu tokenHandler asta generam noi chestii
+            var tokenHandler = new JwtSecurityTokenHandler(); 
             var appPrivateKey = Encoding.ASCII.GetBytes(_appSettings.JwtSecret); //cheia asta appPrivateKey o folosim la hash-uire si o encodam
 
             var tokenDescriptor =

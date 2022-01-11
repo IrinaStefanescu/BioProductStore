@@ -9,5 +9,6 @@ namespace BioProductStore.Services.OrderProductRelationshipService
     public interface IOrderProductService
     {
         public void CreateOrderProductRelation(OrderProductRegisterDTO orderProductRelation);
+        public void UpdateOrderProductRelation(OrderProductRegisterDTO orderProductRelation, Guid id);
     }
 }
