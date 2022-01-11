@@ -9,5 +9,6 @@ namespace BioProductStore.Repositories.OrderRepository
     public interface IOrderRepository : IGenericRepository<Order>
     {
         List<Order> GetAllOrders();
+        List<Order> GetAllOrdersForAUser();
     }
 }

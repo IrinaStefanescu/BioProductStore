@@ -21,5 +21,13 @@ namespace BioProductStore.Repositories.OrderRepository
         {
             return new List<Order>(_context.Orders.AsNoTracking().ToList());
         }
+
+        public List<Order> GetAllOrdersForAUser()
+        {
+            var result = _table.Join(_context.Users, order => order.UserId, user => user.Id,
+                (order, user) => new { order, user }).Select(obj => obj.order).Where(obj => obj.User.Email.Equals("User1@email.com"));
+
+            return result.ToList();
+        }
     }
 }
