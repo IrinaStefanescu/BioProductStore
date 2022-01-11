@@ -46,6 +46,12 @@ namespace BioProductStore.Services.OrderService
             return ordersList;
         }
 
+        public List<Order> GetAllOrdersForAUser()
+        {
+            return _orderRepository.GetAllOrdersForAUser();
+        }
+
+
         public void CreateOrder(RegisterOrderDTO entity)
         { 
             var orderToCreate = _mapper.Map<Order>(entity);
