@@ -23,7 +23,7 @@ namespace BioProductStore.Controllers
         }
 
         //GET
-        [HttpGet("byId")]
+        [HttpGet("byId/{id}")]
         public IActionResult GetById(Guid Id)
         {
             return Ok(_categoryService.GetCategoryByCategoryId(Id));
