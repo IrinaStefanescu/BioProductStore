@@ -25,9 +25,9 @@ namespace BioProductStore.Controllers
 
         //GET
         [HttpGet("byId/{id}")]
-        public IActionResult GetById(Guid Id)
+        public IActionResult GetById(Guid id)
         {
-            return Ok(_expeditionAddressService.GetExpeditionAddressByExpeditionAddressId(Id));
+            return Ok(_expeditionAddressService.GetExpeditionAddressByExpeditionAddressId(id));
         }
 
 

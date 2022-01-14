@@ -25,11 +25,11 @@ namespace BioProductStore.Controllers
         }
 
         //GET
-        [AuthorizationAttribute(Role.Admin)]
+        //[AuthorizationAttribute(Role.Admin)]
         [HttpGet("byId/{id}")]
-        public IActionResult GetById(Guid Id)
+        public IActionResult GetById(Guid id)
         {
-            return Ok(_orderService.GetOrderByOrderId(Id));
+            return Ok(_orderService.GetOrderByOrderId(id));
         }
 
 

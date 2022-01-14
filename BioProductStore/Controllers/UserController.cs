@@ -23,9 +23,9 @@ namespace BioProductStore.Controllers
 
         //GET
         [HttpGet("byId/{id}")]
-        public IActionResult GetById(Guid Id)
+        public IActionResult GetById(Guid id)
         {
-            return Ok(_userService.GetUserByUserId(Id));
+            return Ok(_userService.GetUserByUserId(id));
         }
         //GET ALL
         [HttpGet("allUsers")]
