@@ -8,15 +8,18 @@ namespace BioProductStore.Services
 {
     public interface IUserService
     {
-        RegisterUserDTO GetUserByUserId(Guid Id);
-        public IQueryable<RespondUserDTO> GetAllUsers();
-        public IQueryable<RespondUserDTO> GetAllUsersByName(string name);
+        UserResponseDTO GetUserByUserId(Guid Id);
+        public IQueryable<UserResponseDTO> GetAllUsers();
+        public IQueryable<UserResponseDTO> GetAllUsersByName(string name);
 
-        public IQueryable<RespondUserDTO> GetAllUsersByEmail(string email);
+        public IQueryable<UserResponseDTO> GetAllUsersByEmail(string email);
 
         void CreateUser(RegisterUserDTO entity);
+        void CreateAdmin(RegisterUserDTO entity);
 
         void DeleteUserById(Guid id);
         void UpdateUser(RegisterUserDTO user, Guid id);
+
+        UserResponseTokenDTO Authentificate(LoginUserDTO model);
     }
 }
