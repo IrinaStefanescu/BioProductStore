@@ -1,6 +1,16 @@
 using BioProductStore.Data;
+using BioProductStore.Repositories.CategoryRepository;
+using BioProductStore.Repositories.ExpeditionAddressRepository;
+using BioProductStore.Repositories.OrderRepository;
+using BioProductStore.Repositories.ProductRepository;
 using BioProductStore.Repositories.UserRepository;
 using BioProductStore.Services;
+using BioProductStore.Services.CategoryService;
+using BioProductStore.Services.ExpeditionAddressService;
+using BioProductStore.Services.OrderService;
+using BioProductStore.Services.ProductService;
+using BioProductStore.Utilities;
+using BioProductStore.Utilities.JWTUtils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -39,9 +49,28 @@ namespace BioProductStore
             //Repositories:
             //it's created everytime a request it's been made
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IExpeditionAddressRepository, ExpeditionAddressRepository>();
+           // services.AddTransient<IOrderProductRelationRepository, OrderProductRelationRepository>();
+
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            services.AddScoped<IJWTUtils, JWTUtils>();
+            services.AddScoped<IUserService, UserService>();
+
+            
 
             //Services:
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IExpeditionAddressService, ExpeditionAddressService>();
+           // services.AddTransient<IOrderProductRelationService, OrderProductRelationService>();
+            services.AddDbContext<BioProductStoreContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

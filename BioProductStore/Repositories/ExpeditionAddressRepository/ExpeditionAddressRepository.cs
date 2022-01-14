@@ -17,9 +17,10 @@ namespace BioProductStore.Repositories.ExpeditionAddressRepository
             _context = context;
         }
 
-        public List<ExpeditionAddress> GetAllExpeditionAddresses()
+        public List<ExpeditionAddress> GetAllExpeditionAddress()
         {
             return new List<ExpeditionAddress>(_context.ExpeditionAddresses.AsNoTracking().ToList());
         }
+     
     }
 }
