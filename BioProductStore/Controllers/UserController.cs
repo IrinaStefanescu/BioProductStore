@@ -41,12 +41,7 @@ namespace BioProductStore.Controllers
             return Ok(_userService.GetAllUsersByName(name));
         }
 
-        //GETbyEMAIL
-        [HttpGet("byEmail")]
-        public IActionResult GetAllUsersByEmail(string email)
-        {
-            return Ok(_userService.GetAllUsersByEmail(email));
-        }
+     
 
 
         //POST
