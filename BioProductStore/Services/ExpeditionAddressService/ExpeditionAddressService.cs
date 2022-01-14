@@ -1,4 +1,5 @@
-﻿using BioProductStore.DTOs;
+﻿using AutoMapper;
+using BioProductStore.DTOs;
 using BioProductStore.Models;
 using BioProductStore.Repositories.ExpeditionAddressRepository;
 using Microsoft.Data.SqlClient;
@@ -9,78 +10,80 @@ using System.Threading.Tasks;
 
 namespace BioProductStore.Services.ExpeditionAddressService
 {
-    public class ExpeditionAddressService
+    public class ExpeditionAddressService : IExpeditionAddressService
     {
-        public IExpeditionAddressRepository _deliveryAddressRepository;
+        public IExpeditionAddressRepository _expeditionAddressRepository;
         private readonly IMapper _mapper;
 
-        public ExpeditionAddressService(IExpeditionAddressRepository deliveryAddressRepository, IMapper mapper)
+        public ExpeditionAddressService(IExpeditionAddressRepository expeditionAddressRepository, IMapper mapper)
         {
-            _deliveryAddressRepository = deliveryAddressRepository;
+            _expeditionAddressRepository = expeditionAddressRepository;
             _mapper = mapper;
         }
 
-        public List<ExpeditionAddress> GetAllDeliveryAddresses()
+        public List<ExpeditionAddress> GetAllExpeditionAddresses()
         {
-            List<ExpeditionAddress> deliveryAddressesList = _deliveryAddressRepository.GetAllExpeditionAddresses();
+            List<ExpeditionAddress> expeditionAddressesList = _expeditionAddressRepository.GetAllExpeditionAddress();
 
-            if (deliveryAddressesList.Count == 0)
+            if (expeditionAddressesList.Count == 0)
                 throw new Exception("There are no Delivery Addresses");
 
-            return deliveryAddressesList;
+            return expeditionAddressesList;
         }
 
-        public ExpeditionAddress GetDeliveryAddressByDeliveryAddressId(Guid Id)
+        public ExpeditionAddress GetExpeditionAddressByExpeditionAddressId(Guid Id)
         {
-            ExpeditionAddress deliveryAddress = _deliveryAddressRepository.FindById(Id);
+            ExpeditionAddress expeditionAddress = _expeditionAddressRepository.FindById(Id);
 
-            if (deliveryAddress == null)
+            if (expeditionAddress == null)
                 throw new Exception("Delivery Address not found");
 
-            return deliveryAddress;
+            return expeditionAddress;
         }
 
-        public void CreateDeliveryAddress(RegisterExpeditionAddressDTO entity)
+        public void CreateExpeditionAddress(RegisterExpeditionAddressDTO entity)
         {
-            var deliveryAddressToCreate = _mapper.Map<ExpeditionAddress>(entity);
-            deliveryAddressToCreate.DateCreated = DateTime.Now;
-            deliveryAddressToCreate.DateModified = DateTime.Now;
+            var expeditionAddressToCreate = _mapper.Map<ExpeditionAddress>(entity);
+            expeditionAddressToCreate.DateCreated = DateTime.Now;
+            expeditionAddressToCreate.DateModified = DateTime.Now;
 
-            _deliveryAddressRepository.Create(deliveryAddressToCreate);
-            _deliveryAddressRepository.Save();
+            _expeditionAddressRepository.Create(expeditionAddressToCreate);
+            _expeditionAddressRepository.Save();
         }
 
-        public void DeleteDeliveryAddressById(Guid id)
+        public void DeleteExpeditionAddressById(Guid id)
         {
-            ExpeditionAddress deliveryAddress = _deliveryAddressRepository.FindById(id);
+            ExpeditionAddress expeditionAddress = _expeditionAddressRepository.FindById(id);
 
-            if (deliveryAddress == null)
+            if (expeditionAddress == null)
                 throw new Exception("Delivery Address not found");
 
-            _deliveryAddressRepository.Delete(deliveryAddress);
-            _deliveryAddressRepository.Save();
+            _expeditionAddressRepository.Delete(expeditionAddress);
+            _expeditionAddressRepository.Save();
         }
 
-        public void UpdateDeliveryAddress(UpdateExpeditionAddressDTO deliveryAddress, Guid id)
+        public void UpdateExpeditionAddress(UpdateExpeditionAddressDTO deliveryAddress, Guid id)
         {
-            ExpeditionAddress deliveryAddressToUpdate = _deliveryAddressRepository.FindById(id);
+            ExpeditionAddress expeditionAddressToUpdate = _expeditionAddressRepository.FindById(id);
 
-            if (deliveryAddressToUpdate == null)
+            if (expeditionAddressToUpdate == null)
                 throw new Exception("Delivery Address not found");
 
-            deliveryAddressToUpdate =
-                _mapper.Map<UpdateExpeditionAddressDTO, ExpeditionAddress>(deliveryAddress, deliveryAddressToUpdate);
-            deliveryAddressToUpdate.DateModified = DateTime.Now;
+            expeditionAddressToUpdate =
+                _mapper.Map<UpdateExpeditionAddressDTO, ExpeditionAddress>(deliveryAddress, expeditionAddressToUpdate);
+            expeditionAddressToUpdate.DateModified = DateTime.Now;
 
             try
             {
-                _deliveryAddressRepository.Update(deliveryAddressToUpdate);
-                _deliveryAddressRepository.Save();
+                _expeditionAddressRepository.Update(expeditionAddressToUpdate);
+                _expeditionAddressRepository.Save();
             }
             catch (SqlException ex)
             {
                 Console.WriteLine(ex);
             }
         }
+
+      
     }
 }

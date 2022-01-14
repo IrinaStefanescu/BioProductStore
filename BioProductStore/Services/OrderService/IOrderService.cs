@@ -13,6 +13,6 @@ namespace BioProductStore.Services.OrderService
         public List<Order> GetAllOrders();
         void CreateOrder(RegisterOrderDTO entity);
         void DeleteOrderById(Guid id);
-        void UpdateOrder(RegisterOrderDTO order, Guid id);
+        void UpdateOrder(UpdateOrderDTO order, Guid id);
     }
 }

@@ -1,4 +1,5 @@
-﻿using BioProductStore.DTOs;
+﻿using AutoMapper;
+using BioProductStore.DTOs;
 using BioProductStore.Models;
 using BioProductStore.Repositories.ProductRepository;
 using Microsoft.Data.SqlClient;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BioProductStore.Services.ProductService
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
         public IProductRepository _productRepository;
         private readonly IMapper _mapper;

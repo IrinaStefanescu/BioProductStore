@@ -1,4 +1,5 @@
-﻿using BioProductStore.Data;
+﻿using AutoMapper;
+using BioProductStore.Data;
 using BioProductStore.DTOs;
 using BioProductStore.Models;
 using BioProductStore.Repositories.UserRepository;
@@ -6,7 +7,11 @@ using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BCryptNet = BCrypt.Net.BCrypt;
 using System.Threading.Tasks;
+using BioProductStore.Utilities.JWTUtils;
+using BioProductStore.Utilities;
+using Microsoft.Extensions.Options;
 
 namespace BioProductStore.Services
 {
@@ -74,31 +79,26 @@ namespace BioProductStore.Services
             _userRepository.Save();
         }
 
-        public IQueryable<UserResponseDTO> GetAllUsers()
+        public List<UserResponseDTO> GetAllUsers()
         {
-            List<User> usersList = (List<User>)_userRepository.GetAllUsers();
+            List<User> usersList = _userRepository.GetAllUsers();
 
             if (usersList.Count == 0)
                 throw new Exception("There are no users");
 
             List<UserResponseDTO> userResponseDto = _mapper.Map<List<UserResponseDTO>>(usersList);
-            return (IQueryable<UserResponseDTO>)userResponseDto;
+            return userResponseDto;
         }
 
-        public IQueryable<UserResponseDTO> GetAllUsersByName(string name)
+        public List<UserResponseDTO> GetAllUsersByName(string name)
         {
-            List<User> usersList = (List<User>)_userRepository.GetAllUsersByName(name);
+            List<User> usersList = _userRepository.GetAllUsersByName(name);
             if (usersList.Count == 0)
                 throw new Exception("There are no users with this name");
             List<UserResponseDTO> userResponseDto = _mapper.Map<List<UserResponseDTO>>(usersList);
-            return (IQueryable<UserResponseDTO>)userResponseDto;
+            return userResponseDto;
         }
 
-        public IQueryable<UserResponseDTO> GetAllUsersByEmail(string email)
-        {
-            IQueryable<UserResponseDTO> usersList = (IQueryable<UserResponseDTO>)_userRepository.GetAllUsersByEmail(email);
-            return usersList;
-        }
 
         public void DeleteUserById(Guid id)
         {
@@ -149,5 +149,5 @@ namespace BioProductStore.Services
                 return new UserResponseTokenDTO(user, jwtToken);
             }
         }
-    }
+    
 }

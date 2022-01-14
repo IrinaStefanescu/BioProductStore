@@ -1,4 +1,5 @@
-﻿using BioProductStore.Data;
+﻿using AutoMapper;
+using BioProductStore.Data;
 using BioProductStore.DTOs;
 using BioProductStore.Models;
 using BioProductStore.Repositories.OrderRepository;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BioProductStore.Services.OrderService
 {
-    public class OrderService
+    public class OrderService : IOrderService
     {
         private readonly IMapper _mapper;
         public BioProductStoreContext _context;
@@ -65,6 +66,8 @@ namespace BioProductStore.Services.OrderService
             _orderRepository.Delete(order);
             _orderRepository.Save();
         }
+
+       
 
         public void UpdateOrder(UpdateOrderDTO order, Guid id)
         {

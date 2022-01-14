@@ -1,4 +1,5 @@
-﻿using BioProductStore.DTOs;
+﻿using AutoMapper;
+using BioProductStore.DTOs;
 using BioProductStore.Models;
 using BioProductStore.Repositories.CategoryRepository;
 using Microsoft.Data.SqlClient;

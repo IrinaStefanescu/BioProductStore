@@ -11,12 +11,12 @@ namespace BioProductStore.Services.ExpeditionAddressService
     {
         public List<ExpeditionAddress> GetAllExpeditionAddresses();
 
-        ExpeditionAddress GetDeliveryAddressByExpeditionAddressId(Guid Id);
+        ExpeditionAddress GetExpeditionAddressByExpeditionAddressId(Guid Id);
 
         void CreateExpeditionAddress(RegisterExpeditionAddressDTO entity);
 
         void DeleteExpeditionAddressById(Guid id);
 
-        void UpdateExpeditionAddress(RegisterExpeditionAddressDTO deliveryAddress, Guid id);
+        void UpdateExpeditionAddress(UpdateExpeditionAddressDTO expeditionAddress, Guid id);
     }
 }
