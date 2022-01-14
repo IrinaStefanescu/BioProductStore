@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BioProductStore.Migrations
 {
     [DbContext(typeof(BioProductStoreContext))]
-    [Migration("20220114154605_FixedOrderModel")]
-    partial class FixedOrderModel
+    [Migration("20220114165149_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,28 +46,6 @@ namespace BioProductStore.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("BioProductStore.Models.DataBaseModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DateCreated")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DataBaseModels");
-                });
-
             modelBuilder.Entity("BioProductStore.Models.ExpeditionAddress", b =>
                 {
                     b.Property<Guid>("Id")
@@ -91,9 +69,6 @@ namespace BioProductStore.Migrations
                     b.Property<string>("Number")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("PostalCode")
                         .HasColumnType("nvarchar(max)");
 
@@ -101,9 +76,6 @@ namespace BioProductStore.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId")
-                        .IsUnique();
 
                     b.ToTable("ExpeditionAddresses");
                 });
@@ -138,33 +110,6 @@ namespace BioProductStore.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("BioProductStore.Models.OrderProduct", b =>
-                {
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DateCreated")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("OrderId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderProduct");
-                });
-
             modelBuilder.Entity("BioProductStore.Models.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -172,9 +117,6 @@ namespace BioProductStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CategpryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DateCreated")
@@ -238,11 +180,26 @@ namespace BioProductStore.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("OrderProduct", b =>
+                {
+                    b.Property<Guid>("OrdersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("OrdersId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("OrderProduct");
+                });
+
             modelBuilder.Entity("BioProductStore.Models.ExpeditionAddress", b =>
                 {
                     b.HasOne("BioProductStore.Models.Order", "Order")
                         .WithOne("ExpeditionAddress")
-                        .HasForeignKey("BioProductStore.Models.ExpeditionAddress", "OrderId")
+                        .HasForeignKey("BioProductStore.Models.ExpeditionAddress", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -258,25 +215,6 @@ namespace BioProductStore.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("BioProductStore.Models.OrderProduct", b =>
-                {
-                    b.HasOne("BioProductStore.Models.Order", "Order")
-                        .WithMany("OrderProducts")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BioProductStore.Models.Product", "Product")
-                        .WithMany("OrderProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("BioProductStore.Models.Product", b =>
                 {
                     b.HasOne("BioProductStore.Models.Category", "Category")
@@ -284,6 +222,21 @@ namespace BioProductStore.Migrations
                         .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("OrderProduct", b =>
+                {
+                    b.HasOne("BioProductStore.Models.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BioProductStore.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BioProductStore.Models.Category", b =>
@@ -294,13 +247,6 @@ namespace BioProductStore.Migrations
             modelBuilder.Entity("BioProductStore.Models.Order", b =>
                 {
                     b.Navigation("ExpeditionAddress");
-
-                    b.Navigation("OrderProducts");
-                });
-
-            modelBuilder.Entity("BioProductStore.Models.Product", b =>
-                {
-                    b.Navigation("OrderProducts");
                 });
 
             modelBuilder.Entity("BioProductStore.Models.User", b =>

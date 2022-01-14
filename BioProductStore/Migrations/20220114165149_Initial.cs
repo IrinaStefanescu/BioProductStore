@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BioProductStore.Migrations
 {
-    public partial class SecondCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,20 +20,6 @@ namespace BioProductStore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DataBaseModels",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DateModified = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DataBaseModels", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,7 +50,6 @@ namespace BioProductStore.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CategpryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DateModified = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -86,7 +71,7 @@ namespace BioProductStore.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DateModified = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -98,7 +83,7 @@ namespace BioProductStore.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -111,7 +96,6 @@ namespace BioProductStore.Migrations
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Number = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DateModified = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -119,8 +103,8 @@ namespace BioProductStore.Migrations
                 {
                     table.PrimaryKey("PK_ExpeditionAddresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExpeditionAddresses_Orders_OrderId",
-                        column: x => x.OrderId,
+                        name: "FK_ExpeditionAddresses_Orders_Id",
+                        column: x => x.Id,
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -130,39 +114,30 @@ namespace BioProductStore.Migrations
                 name: "OrderProduct",
                 columns: table => new
                 {
-                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DateModified = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    OrdersId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderProduct", x => new { x.OrderId, x.ProductId });
+                    table.PrimaryKey("PK_OrderProduct", x => new { x.OrdersId, x.ProductsId });
                     table.ForeignKey(
-                        name: "FK_OrderProduct_Orders_OrderId",
-                        column: x => x.OrderId,
+                        name: "FK_OrderProduct_Orders_OrdersId",
+                        column: x => x.OrdersId,
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderProduct_Products_ProductId",
-                        column: x => x.ProductId,
+                        name: "FK_OrderProduct_Products_ProductsId",
+                        column: x => x.ProductsId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExpeditionAddresses_OrderId",
-                table: "ExpeditionAddresses",
-                column: "OrderId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderProduct_ProductId",
+                name: "IX_OrderProduct_ProductsId",
                 table: "OrderProduct",
-                column: "ProductId");
+                column: "ProductsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
@@ -177,9 +152,6 @@ namespace BioProductStore.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "DataBaseModels");
-
             migrationBuilder.DropTable(
                 name: "ExpeditionAddresses");
 
