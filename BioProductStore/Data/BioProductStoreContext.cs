@@ -9,8 +9,6 @@ namespace BioProductStore.Data
 {
     public class BioProductStoreContext : DbContext
     {
-        //for manipulation - > context -> tables defined as sets
-        public DbSet<DataBaseModel> DataBaseModels { get; set; }
         //Users table
         public DbSet<User> Users { get; set; }
         //Orders table
@@ -22,8 +20,6 @@ namespace BioProductStore.Data
         //ExpeditionAddress table
         public DbSet<ExpeditionAddress> ExpeditionAddresses { get; set; }
 
-        //many-to-many relationship between Orders and Products
-        public DbSet<OrderProduct> OrderProduct { get; set; }
         //constructor
         public BioProductStoreContext(DbContextOptions<BioProductStoreContext> options) : base(options)
         {
@@ -60,30 +56,12 @@ namespace BioProductStore.Data
             builder.Entity<Order>() //One Order has one ExpeditionAdress.
                 .HasOne(o => o.ExpeditionAddress)
                 .WithOne(d => d.Order)
-                .HasForeignKey<ExpeditionAddress>(d => d.OrderId);
-
+                .HasForeignKey<ExpeditionAddress>(e => e.Id);
 
             //3. MANY-TO-MANY:
-
-            //Many-to-many relationship between Order and Product = > OrderProduct associative tabel
-            builder.Entity<OrderProduct>()
-                .HasKey(op => new //OrderProduct class will have the Id as a tuple of the 2 primary keys
-                {
-                    op.OrderId,
-                    op.ProductId
-                });
-
-
-            builder.Entity<OrderProduct>() //One Order can have multiple OrderProducts
-                .HasOne<Order>(op => op.Order)
-                .WithMany(o => o.OrderProducts)
-                .HasForeignKey(op => op.OrderId);
-
-            builder.Entity<OrderProduct>() //One Product can have multiple OrderProducrs
-                .HasOne<Product>(op => op.Product)
-                .WithMany(p => p.OrderProducts)
-                .HasForeignKey(op => op.ProductId);
-
+            builder.Entity<Order>()
+                .HasMany(o => o.Products)
+                .WithMany(p => p.Orders);
 
             base.OnModelCreating(builder);
         }

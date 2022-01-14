@@ -24,7 +24,7 @@ namespace BioProductStore.Repositories.OrderRepository
 
         public List<Order> GetAllOrdersForAUser()
         {
-            var result = _table.Join(_context.Users, order => order.UserId, user => user.Id,
+            var result = _table.Join(_context.Users, order => order.User.Id, user => user.Id,
                 (order, user) => new { order, user }).Select(obj => obj.order).Where(obj => obj.User.Email.Equals("User1@email.com"));
 
             return result.ToList();

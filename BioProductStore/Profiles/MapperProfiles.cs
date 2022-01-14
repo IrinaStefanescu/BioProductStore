@@ -36,10 +36,6 @@ namespace BioProductStore.Profiles
             //DeliveryAddress
             CreateMap<RegisterExpeditionAddressDTO, ExpeditionAddress>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); ;
             CreateMap<UpdateExpeditionAddressDTO, ExpeditionAddress>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); ;
-
-            //OrderProductRelation
-            CreateMap<OrderProductRegisterDTO, OrderProduct>();
-            //CreateMap<OrderProductUpdateDTO, OrderProduct>();
         }
     }
 }

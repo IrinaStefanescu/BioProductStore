@@ -1,6 +1,8 @@
 ﻿using BioProductStore.Data;
 using BioProductStore.DTOs;
+using BioProductStore.Models;
 using BioProductStore.Services.OrderService;
+using BioProductStore.Utilities.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -23,6 +25,7 @@ namespace BioProductStore.Controllers
         }
 
         //GET
+        [AuthorizationAttribute(Role.Admin)]
         [HttpGet("byId/{id}")]
         public IActionResult GetById(Guid Id)
         {

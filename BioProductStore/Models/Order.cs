@@ -12,10 +12,9 @@ namespace BioProductStore.Models
         public int Quantity { get; set; }
 
         public User User { get; set; }
-        public Guid UserId { get; set; }
 
         public ExpeditionAddress ExpeditionAddress { get; set; }
 
-        public ICollection<OrderProduct> OrderProducts { get; set; }
+        public ICollection<Product> Products { get; set; }
     }
 }

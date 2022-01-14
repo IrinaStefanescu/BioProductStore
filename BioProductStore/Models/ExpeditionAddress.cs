@@ -15,6 +15,5 @@ namespace BioProductStore.Models
         public string PostalCode { get; set; }
 
         public Order Order { get; set; }
-        public Guid OrderId { get; set; }
     }
 }
