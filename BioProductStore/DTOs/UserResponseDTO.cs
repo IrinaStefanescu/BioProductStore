@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 
 namespace BioProductStore.DTOs
 {
-    public class RespondUserDTO
+    public class UserResponseDTO
     {
-        //we use this DTO to send only what info we want
-        //for example we don't want to sens user's password
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
