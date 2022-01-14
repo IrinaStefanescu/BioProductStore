@@ -9,8 +9,9 @@ namespace BioProductStore.Repositories.UserRepository
 {
     public interface IUserRepository : IGenericRepository<User>
     {
-        IQueryable<RespondUserDTO> GetAllUsers();
-        IQueryable<RespondUserDTO> GetAllUsersByName(string name);
-        IQueryable<RespondUserDTO> GetAllUsersByEmail(string email);
+        List<User> GetAllUsers();
+        List<User> GetAllUsersByName(string name);
+        User GetByUsername(string name);
+        User GetByEmail(string name);
     }
 }
