@@ -1,31 +1,30 @@
-﻿using AutoMapper;
-using BioProductStore.DTOs;
-using BioProductStore.Models;
-using BioProductStore.Repositories.CategoryRepository;
-using Microsoft.Data.SqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
+using BioProductStore.DataAccess;
+using BioProductStore.DTOs;
+using BioProductStore.Models;
+using Microsoft.Data.SqlClient;
 
 namespace BioProductStore.Services.CategoryService
 {
     public class CategoryService : ICategoryService
     {
-        public ICategoryRepository _categoryRepository;
+        private UnitOfWork _uow;
         private readonly IMapper _mapper;
 
-        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
+        public CategoryService(UnitOfWork uow, IMapper mapper)
         {
-            _categoryRepository = categoryRepository;
+            _uow = uow;
             _mapper = mapper;
         }
 
         public List<CategoryResponseDTO> GetAllCategories()
         {
-            List<Category> categoriesList = _categoryRepository.GetAllCategories();
+            var categoriesList = _uow.Category.GetAllAsQueryable();
 
-            if (categoriesList.Count == 0)
+            if (categoriesList.Count() == 0)
                 throw new Exception("There are no categories");
 
             List<CategoryResponseDTO> categoryRespondDTO = _mapper.Map<List<CategoryResponseDTO>>(categoriesList);
@@ -34,7 +33,7 @@ namespace BioProductStore.Services.CategoryService
 
         public CategoryResponseDTO GetCategoryByCategoryId(Guid Id)
         {
-            Category category = _categoryRepository.FindById(Id);
+            Category category = _uow.Category.FindById(Id);
 
             if (category == null)
                 throw new Exception("Category not found");
@@ -45,31 +44,31 @@ namespace BioProductStore.Services.CategoryService
 
         public void CreateCategory(RegisterCategoryDTO entity)
         {
-            if (_categoryRepository.GetByName(entity.Name) != null)
+            if (_uow.Category.FindBy(e => e.Name == entity.Name) != null)
                 throw new Exception("Category already exists");
 
             var categoryToCreate = _mapper.Map<Category>(entity);
             categoryToCreate.DateCreated = DateTime.Now;
             categoryToCreate.DateModified = DateTime.Now;
 
-            _categoryRepository.Create(categoryToCreate);
-            _categoryRepository.Save();
+            _uow.Category.Create(categoryToCreate);
+            _uow.SaveChanges();
         }
 
         public void DeleteCategoryById(Guid id)
         {
-            Category category = _categoryRepository.FindById(id);
+            Category category = _uow.Category.FindById(id);
 
             if (category == null)
                 throw new Exception("Category not found");
 
-            _categoryRepository.Delete(category);
-            _categoryRepository.Save();
+            _uow.Category.Delete(category);
+            _uow.SaveChanges();
         }
 
         public void UpdateCategory(RegisterCategoryDTO category, Guid id)
         {
-            Category categoryToUpdate = _categoryRepository.FindById(id);
+            Category categoryToUpdate = _uow.Category.FindById(id);
 
             if (categoryToUpdate == null)
                 throw new Exception("Category not found");
@@ -79,8 +78,8 @@ namespace BioProductStore.Services.CategoryService
 
             try
             {
-                _categoryRepository.Update(categoryToUpdate);
-                _categoryRepository.Save();
+                _uow.Category.Update(categoryToUpdate);
+                _uow.SaveChanges();
             }
             catch (SqlException ex)
             {
