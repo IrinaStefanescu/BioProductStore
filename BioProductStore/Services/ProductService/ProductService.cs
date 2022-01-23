@@ -1,31 +1,30 @@
-﻿using AutoMapper;
-using BioProductStore.DTOs;
-using BioProductStore.Models;
-using BioProductStore.Repositories.ProductRepository;
-using Microsoft.Data.SqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
+using BioProductStore.DataAccess;
+using BioProductStore.DTOs;
+using BioProductStore.Models;
+using Microsoft.Data.SqlClient;
 
 namespace BioProductStore.Services.ProductService
 {
     public class ProductService : IProductService
     {
-        public IProductRepository _productRepository;
+        public UnitOfWork _uow;
         private readonly IMapper _mapper;
 
-        public ProductService(IProductRepository productRepository, IMapper mapper)
+        public ProductService(UnitOfWork uow, IMapper mapper)
         {
-            _productRepository = productRepository;
+            _uow = uow;
             _mapper = mapper;
         }
 
         public List<ProductResponseDTO> GetAllProducts()
         {
-            List<Product> productsList = _productRepository.GetAllProducts();
+            var productsList = _uow.Product.GetAllAsQueryable();
 
-            if (productsList.Count == 0)
+            if (productsList.Count() == 0)
                 throw new Exception("There are no products");
 
             List<ProductResponseDTO> productRespondDto = _mapper.Map<List<ProductResponseDTO>>(productsList);
@@ -35,7 +34,7 @@ namespace BioProductStore.Services.ProductService
 
         public ProductResponseDTO GetProductByProductId(Guid Id)
         {
-            Product product = _productRepository.FindById(Id);
+            Product product = _uow.Product.FindById(Id);
 
             if (product == null)
                 throw new Exception("Product not found");
@@ -47,31 +46,31 @@ namespace BioProductStore.Services.ProductService
         public void CreateProduct(RegisterProductDTO entity)
         {
             // verific ca numele produsului sa fie unic
-            if (_productRepository.GetByName(entity.Name) != null)
+            if (_uow.Product.FindBy(e => e.Name == entity.Name) != null)
                 throw new Exception("Product already exists");
 
             var productToCreate = _mapper.Map<Product>(entity);
             productToCreate.DateCreated = DateTime.Now;
             productToCreate.DateModified = DateTime.Now;
 
-            _productRepository.Create(productToCreate);
-            _productRepository.Save();
+            _uow.Product.Create(productToCreate);
+            _uow.SaveChanges();
         }
 
         public void DeleteProductById(Guid id)
         {
-            Product product = _productRepository.FindById(id);
+            Product product = _uow.Product.FindById(id);
 
             if (product == null)
                 throw new Exception("Product not found");
 
-            _productRepository.Delete(product);
-            _productRepository.Save();
+            _uow.Product.Delete(product);
+            _uow.SaveChanges();
         }
 
         public void UpdateProduct(UpdateProductDTO newproduct, Guid id)
         {
-            Product productToUpdate = _productRepository.FindById(id);
+            Product productToUpdate = _uow.Product.FindById(id);
 
             if (productToUpdate == null)
                 throw new Exception("Product not found");
@@ -81,8 +80,8 @@ namespace BioProductStore.Services.ProductService
 
             try
             {
-                _productRepository.Update(productToUpdate);
-                _productRepository.Save();
+                _uow.Product.Update(productToUpdate);
+                _uow.SaveChanges();
             }
             catch (SqlException ex)
             {

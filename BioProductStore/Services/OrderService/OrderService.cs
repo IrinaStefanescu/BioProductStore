@@ -1,34 +1,30 @@
-﻿using AutoMapper;
-using BioProductStore.Data;
-using BioProductStore.DTOs;
-using BioProductStore.Models;
-using BioProductStore.Repositories.OrderRepository;
-using Microsoft.Data.SqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
+using BioProductStore.DataAccess;
+using BioProductStore.DTOs;
+using BioProductStore.Models;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace BioProductStore.Services.OrderService
 {
     public class OrderService : IOrderService
     {
         private readonly IMapper _mapper;
-        public BioProductStoreContext _context;
-        public IOrderRepository _orderRepository;
-
-
-        public OrderService(IMapper mapper, BioProductStoreContext context, IOrderRepository orderRepository)
+        private UnitOfWork _uow;
+        
+        public OrderService(IMapper mapper, UnitOfWork uow)
         {
             _mapper = mapper;
-            _context = context;
-            _orderRepository = orderRepository;
+            _uow = uow;
         }
 
 
         public Order GetOrderByOrderId(Guid Id)
         {
-            Order order = _orderRepository.FindById(Id);
+            Order order = _uow.Order.FindById(Id);
 
             if (order == null)
                 throw new Exception("Order not found");
@@ -38,19 +34,22 @@ namespace BioProductStore.Services.OrderService
 
         public List<Order> GetAllOrders()
         {
-            List<Order> ordersList = _orderRepository.GetAllOrders();
+            var ordersList = _uow.Order.GetAllAsQueryable();
 
-            if (ordersList.Count == 0)
+            if (ordersList.Count() == 0)
                 throw new Exception("There are no orders");
 
-            return ordersList;
+            return ordersList.ToList();
         }
 
-        public List<Order> GetAllOrdersForAUser()
+        public List<Order> GetAllOrdersForAUser(Guid userId)
         {
-            return _orderRepository.GetAllOrdersForAUser();
+            return _uow.Order
+                .GetAllAsQueryable()
+                .Include(o => o.User)
+                .Where(o => o.User.Id == userId)
+                .ToList();
         }
-
 
         public void CreateOrder(RegisterOrderDTO entity)
         { 
@@ -58,26 +57,26 @@ namespace BioProductStore.Services.OrderService
             orderToCreate.DateCreated = DateTime.Now;
             orderToCreate.DateModified = DateTime.Now;
 
-            _orderRepository.Create(orderToCreate);
-            _orderRepository.Save();
+            _uow.Order.Create(orderToCreate);
+            _uow.SaveChanges();
         }
 
         public void DeleteOrderById(Guid id)
         {
-            Order order = _orderRepository.FindById(id);
+            Order order = _uow.Order.FindById(id);
 
             if (order == null)
                 throw new Exception("Order not found");
 
-            _orderRepository.Delete(order);
-            _orderRepository.Save();
+            _uow.Order.Delete(order);
+            _uow.SaveChanges();
         }
 
        
 
         public void UpdateOrder(UpdateOrderDTO order, Guid id)
         {
-            Order orderToUpdate = _orderRepository.FindById(id);
+            Order orderToUpdate = _uow.Order.FindById(id);
 
             if (orderToUpdate == null)
                 throw new Exception("Order not found");
@@ -87,8 +86,8 @@ namespace BioProductStore.Services.OrderService
 
             try
             {
-                _orderRepository.Update(orderToUpdate);
-                _orderRepository.Save();
+                _uow.Order.Update(orderToUpdate);
+                _uow.SaveChanges();
             }
             catch (SqlException ex)
             {

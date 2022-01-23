@@ -20,6 +20,5 @@ namespace BioProductStore.Services
         void DeleteUserById(Guid id);
         void UpdateUser(RegisterUserDTO user, Guid id);
 
-        UserResponseTokenDTO Authentificate(LoginUserDTO model);
     }
 }

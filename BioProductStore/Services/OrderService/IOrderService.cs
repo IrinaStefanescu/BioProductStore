@@ -11,7 +11,7 @@ namespace BioProductStore.Services.OrderService
     {
         Order GetOrderByOrderId(Guid Id);
         public List<Order> GetAllOrders();
-        public List<Order> GetAllOrdersForAUser();
+        public List<Order> GetAllOrdersForAUser(Guid userId);
         void CreateOrder(RegisterOrderDTO entity);
         void DeleteOrderById(Guid id);
         void UpdateOrder(UpdateOrderDTO order, Guid id);
