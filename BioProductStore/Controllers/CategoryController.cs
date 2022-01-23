@@ -6,11 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BioProductStore.Models;
+using BioProductStore.Utilities.Attributes;
 
 namespace BioProductStore.Controllers
 {
     [Route("api/[controller]")] 
     [ApiController]
+    [Authorization(Role.Admin)]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;

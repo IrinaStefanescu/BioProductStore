@@ -40,18 +40,7 @@ namespace BioProductStore.Controllers
         {
             return Ok(_userService.GetAllUsersByName(name));
         }
-
-     
-
-
-        //POST
-        [HttpPost("create")]
-        public IActionResult Create(RegisterUserDTO user)
-        {
-            _userService.CreateUser(user);
-            return Ok();
-        }
-
+        
         //PUT
         [HttpPut("updateUser")]
         public IActionResult Update(RegisterUserDTO user, Guid id)

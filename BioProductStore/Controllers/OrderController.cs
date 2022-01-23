@@ -1,13 +1,8 @@
-﻿using BioProductStore.Data;
+﻿using System;
+using BioProductStore.Data;
 using BioProductStore.DTOs;
-using BioProductStore.Models;
 using BioProductStore.Services.OrderService;
-using BioProductStore.Utilities.Attributes;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BioProductStore.Controllers
 {
@@ -39,10 +34,10 @@ namespace BioProductStore.Controllers
             return Ok(_orderService.GetAllOrders());
         }
 
-        [HttpGet("allOrdersForAUser")]
-        public IActionResult GetAllOrdersForAUser()
+        [HttpGet("allOrdersForAUser/{id}")]
+        public IActionResult GetAllOrdersForAUser(Guid id)
         {
-            return Ok(_orderService.GetAllOrdersForAUser());
+            return Ok(_orderService.GetAllOrdersForAUser(id));
         }
 
 
