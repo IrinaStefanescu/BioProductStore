@@ -10,9 +10,8 @@ namespace BioProductStore.DTOs
     {
         //data sent by us to login
 
-        [Required]
         public string Username { get; set; }
-        [Required]
-        public string PasswordHash { get; set; }
+
+        public string Password { get; set; }
     }
 }
