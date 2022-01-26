@@ -7,6 +7,8 @@ namespace BioProductStore.DTOs
 {
     public class CategoryResponseDTO
     {
+        public Guid id { get; set; }
         public string Name { get; set; }
+        public string imgAddress { get; set; }
     }
 }

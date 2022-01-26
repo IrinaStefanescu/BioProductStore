@@ -10,5 +10,6 @@ namespace BioProductStore.DTOs
         public string Name { get; set; }
 
         public string Description { get; set; }
+        public string imgAddress { get; set; }
     }
 }
