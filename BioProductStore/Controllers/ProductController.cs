@@ -14,7 +14,7 @@ namespace BioProductStore.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorization(Role.Admin)]
+    //[Authorization(Role.Admin)]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -34,8 +34,8 @@ namespace BioProductStore.Controllers
         }
 
 
-        [HttpGet("allCategories")]
-        public IActionResult GetAllCategories()
+        [HttpGet("allProducts")]
+        public IActionResult GetAllProducts()
         {
             return Ok(_productService.GetAllProducts());
         }
