@@ -3,17 +3,14 @@ using BioProductStore.DTOs;
 using BioProductStore.Services.CategoryService;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BioProductStore.Models;
-using BioProductStore.Utilities.Attributes;
+
 
 namespace BioProductStore.Controllers
 {
+    //[EnableCors("AllowOrigin")]
     [Route("api/[controller]")] 
     [ApiController]
-    [Authorization(Role.Admin)]
+    //[Authorization(Role.Admin)]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -32,8 +29,8 @@ namespace BioProductStore.Controllers
             return Ok(_categoryService.GetCategoryByCategoryId(id));
         }
 
-
-        [HttpGet("allCategories")]
+        
+        [HttpGet("/allCategories")]
         public IActionResult GetAllCategories()
         {
             return Ok(_categoryService.GetAllCategories());

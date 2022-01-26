@@ -23,6 +23,8 @@ namespace BioProductStore
 {
     public class Startup
     {
+        public string CorsAllowSpecificOrigin = "frontendAllowOrigin";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -80,6 +82,7 @@ namespace BioProductStore
             services.AddTransient<UnitOfWork>();
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+           
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IJWTUtils, JWTUtils>();
 
@@ -91,6 +94,22 @@ namespace BioProductStore
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IExpeditionAddressService, ExpeditionAddressService>();
 
+            //services.AddCors(c =>
+            // {
+            //    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin()
+            // .AllowAnyHeader());
+            //});
+            services.AddCors(option =>
+            {
+                option.AddPolicy(name: CorsAllowSpecificOrigin,
+                    builder =>
+                    {
+                        builder.WithOrigins("https://localhost:4200", "https://localhost:4201", "http://localhost:4200") //aici punem ce origine avem noi
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -108,6 +127,9 @@ namespace BioProductStore
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            //app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader());
+            app.UseCors(CorsAllowSpecificOrigin);
 
             //others
             app.UseHttpsRedirection();
