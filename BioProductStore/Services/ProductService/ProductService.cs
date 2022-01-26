@@ -6,6 +6,7 @@ using BioProductStore.DataAccess;
 using BioProductStore.DTOs;
 using BioProductStore.Models;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace BioProductStore.Services.ProductService
 {
@@ -18,6 +19,21 @@ namespace BioProductStore.Services.ProductService
         {
             _uow = uow;
             _mapper = mapper;
+        }
+
+        public List<ProductResponseDTO> GetAllProductsByCategoryId(Guid id)
+        {
+            var productsList = _uow.Product
+                .GetAllAsQueryable()
+                .Include(p => p.Category)
+                .Where(p => p.Category.Id == id);
+
+            if (productsList.Count() == 0)
+                throw new Exception("There are no products");
+
+            List<ProductResponseDTO> productRespondDto = _mapper.Map<List<ProductResponseDTO>>(productsList);
+            return productRespondDto;
+
         }
 
         public List<ProductResponseDTO> GetAllProducts()
@@ -50,6 +66,9 @@ namespace BioProductStore.Services.ProductService
                 throw new Exception("Product already exists");
 
             var productToCreate = _mapper.Map<Product>(entity);
+            productToCreate.Category = _uow.Category.FindById(entity.CategoryId)
+                ?? throw new ArgumentException($"Category {entity.CategoryId} not found", nameof(entity));
+
             productToCreate.DateCreated = DateTime.Now;
             productToCreate.DateModified = DateTime.Now;
 

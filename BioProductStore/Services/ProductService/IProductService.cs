@@ -10,6 +10,8 @@ namespace BioProductStore.Services.ProductService
     {
         public List<ProductResponseDTO> GetAllProducts();
 
+        List<ProductResponseDTO> GetAllProductsByCategoryId(Guid id);
+
         ProductResponseDTO GetProductByProductId(Guid Id);
 
         void CreateProduct(RegisterProductDTO entity);

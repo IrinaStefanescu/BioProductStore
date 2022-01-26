@@ -11,9 +11,7 @@ namespace BioProductStore.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public string Price { get; set; }
-
         public ICollection<Order> Orders { get; set; }
-
         public Category Category { get; set; }
     }
 }

@@ -32,8 +32,7 @@ namespace BioProductStore.Repositories
         //not recomandable
         public IQueryable<TEntity> GetAllAsQueryable()
         {
-            return _table.AsNoTracking();
-
+            return _table;
             //try not to use toList, Ccount, etc before filtering the data
             //var entityList = _table.ToList();
             //var entityListFiltered = _table.Where(x => x.Id.ToString() != "");

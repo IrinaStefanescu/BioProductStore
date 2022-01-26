@@ -40,6 +40,12 @@ namespace BioProductStore.Controllers
             return Ok(_productService.GetAllProducts());
         }
 
+        [HttpGet("allProductsByCategoryId/{id}")]
+        public IActionResult GetAllProductsByCategoryId(Guid id)
+        {
+            return Ok(_productService.GetAllProductsByCategoryId(id));
+        }
+
 
         //POST
         [HttpPost("create")]
